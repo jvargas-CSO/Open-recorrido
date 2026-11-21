@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Recorrido OPEN</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===================== VISTA: ADMIN (ejecutivo arma el recorrido) ===================== -->
+  <div class="view" id="view-admin">
+    <div class="topbar">
+      <img src="assets/open-logo.png" alt="OPEN">
+      <span>Armar Recorrido</span>
+    </div>
+    <div class="admin-wrap">
+
+      <div class="admin-card">
+        <h2>1. Busca los sitios</h2>
+        <label>Buscar por ID, medio, soporte, vista, domicilio o ciudad</label>
+        <input type="text" id="q-texto" placeholder="ej. OPEN-PV4, aeropuerto, panorámica, Zapopan...">
+        <button class="btn-primary" id="btn-buscar">Buscar sitios</button>
+        <div class="resultados-lista" id="resultados-lista"></div>
+      </div>
+
+      <div class="admin-card">
+        <h2>2. Sitios seleccionados <span class="chip-count" id="contador-seleccion">0</span></h2>
+        <div class="resultados-lista" id="seleccionados-lista">
+          <div class="sitio-row">Todavía no seleccionas ningún sitio.</div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>3. Datos del recorrido</h2>
+        <label>Nombre del cliente</label>
+        <input type="text" id="f-cliente" placeholder="ej. Chips / La Costeña">
+        <label>Ejecutivo</label>
+        <input type="text" id="f-ejecutivo" placeholder="Tu nombre">
+        <label>PIN de ejecutivo</label>
+        <input type="password" id="f-pin" placeholder="PIN">
+        <button class="btn-primary" id="btn-crear-recorrido" disabled>Crear recorrido y generar link</button>
+        <div id="link-generado"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== VISTA: RECORRIDO (mapa + swipe en campo) ===================== -->
+  <div class="view" id="view-recorrido">
+    <div class="topbar">
+      <div>
+        <div id="nombre-cliente-top" style="font-weight:700;"></div>
+        <div class="progreso" id="progreso-top">0 de 0 sitios vistos</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="ghost" id="btn-ver-lista">📋 Lista</button>
+        <button class="ghost" id="btn-finalizar">Finalizar</button>
+      </div>
+    </div>
+    <div class="perfil-bar" id="perfil-bar"></div>
+    <div id="map"></div>
+    <div id="lista-sitios" class="lista-sitios"></div>
+    <button class="fab-finalizar no-print" id="btn-finalizar-fab" onclick="document.getElementById('btn-finalizar').click()">🏁 Finalizar recorrido</button>
+  </div>
+
+  <!-- ===================== VISTA: RESUMEN / cierre ===================== -->
+  <div class="view" id="view-resumen">
+    <div class="topbar">
+      <img src="assets/open-logo.png" alt="OPEN">
+      <span>Resumen del recorrido</span>
+    </div>
+    <div class="resumen-wrap">
+      <h2 class="resumen-titulo">Recorrido de <span id="resumen-cliente"></span></h2>
+      <div id="resumen-contenido"></div>
+      <button class="btn-primary no-print" id="btn-imprimir">Imprimir / Guardar como PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Ficha tecnica (bottom sheet) -->
+<div id="ficha-overlay">
+  <div class="ficha-card">
+    <button class="cerrar" id="btn-cerrar-ficha">✕</button>
+    <h3 id="ficha-id"></h3>
+    <div class="subtitulo" id="ficha-subtitulo"></div>
+    <div class="trafico-box" id="ficha-trafico" style="display:none;"></div>
+    <a id="ficha-pdf-link" href="#" target="_blank" rel="noopener" class="btn-secondary" style="display:none; margin-bottom:12px;">📄 Ver ficha técnica completa (foto + specs)</a>
+    <div class="specs-grid" id="ficha-specs"></div>
+    <label style="font-size:12px;color:#6b7a85;">Notas del cliente</label>
+    <textarea class="notas" id="ficha-notas" placeholder="¿Qué te pareció este sitio?"></textarea>
+    <div class="swipe-actions">
+      <button class="btn-swipe btn-dislike" id="btn-dislike">👎 No</button>
+      <button class="btn-swipe btn-duda" id="btn-duda">🤔 Lo pienso</button>
+      <button class="btn-swipe btn-like" id="btn-like">❤️ Me gusta</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/config.js"></script>
+<script src="js/trafico_piloto.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
